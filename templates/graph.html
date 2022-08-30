@@ -1,52 +1,79 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Flask-Sock Demo</title>
-  </head>
-  <body>
-    <h1>Flask-Sock Demo</h1>
-    <div id="log"></div>
-    <br>
-    <script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pressure Data</title>   
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<!--suppress JSUnresolvedLibraryURL -->
+<script src="{{url_for('static', filename='Chart.js')}}"></script>
+<script>
+    
     const config = {
-      type: 'line',
-      data: {
-        labels: Array(30).fill("00:00:00"),
-        datasets: [{
-          label: "Random Dataset",
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 99, 132)',
-          data: Array(30).fill(null),
-          fill: false,
-        }],
-      }
-    };
-      // const context = document.getElementById('canvas').getContext('2d');
-
-      // const lineChart = new Chart(context, config);
-
-      
-
-      const log = (text, color) => {
-        document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
-      };
-
-      const socket = new WebSocket('ws://' + location.host + '/graph/data');
-      socket.addEventListener('message', ev => {
-        const obj = JSON.parse(ev.data);
-        log('>>> ' + obj.data, 'red');
-        log('<<< ' + obj.label, 'blue');
-
-        const data = JSON.parse(event.data);
-            if (config.data.labels.length === 30) {
-                config.data.labels.shift();
-                config.data.datasets[0].data.shift();
+        type: 'line',
+        data: {
+            labels: Array(30).fill("00:00:00"),
+            datasets: [{
+                label: "Random Dataset",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: Array(30).fill(null),
+                fill: false,
+            }],
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Creating Real-Time charts with Flask'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Value'
+                    }
+                }]
             }
-            config.data.labels.push(obj.label);
-            config.data.datasets[0].data.push(obj.data);
-            lineChart.update();
-      });
-      
-    </script>
-  </body>
+        }
+    };
+
+    const context = document.getElementById('canvas').getContext('2d');
+
+    const lineChart = new Chart(context, config);
+
+    const source = new EventSource("/chart-data");
+
+    const socket = new WebSocket('ws://' + location.host + '/graph/data');
+    socket.addEventListener('message', ev => {
+        const data = JSON.parse(ev.data);
+        if (config.data.labels.length === 30) {
+            config.data.labels.shift();
+            config.data.datasets[0].data.shift();
+        }
+        config.data.labels.push(data.label);
+        config.data.datasets[0].data.push(data.data);
+        lineChart.update();
+    });
+    
+</script>
+</body>
 </html>

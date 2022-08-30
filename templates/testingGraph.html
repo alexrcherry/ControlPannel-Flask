@@ -1,33 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pressure Data</title>   
-</head>
-<body>
-<canvas id="canvas"></canvas>
+{% extends 'base.html'%}
 
-<!--suppress JSUnresolvedLibraryURL -->
-<script src="{{url_for('static', filename='Chart.js')}}"></script>
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<h1 style="text-align: center;">
+    Control Panel
+</h1>
+
+<div style="margin: auto; height:90vh; width:90vw;border: 1px solid#e01111 ;">
+    <div>
+        <canvas id="graph0" style="display: block;border: 1px solid#000000 ;"></canvas>
+    </div>
+    <div>
+        <canvas id="graph1" style="display: block;border: 1px solid #1a3dd9 ;"></canvas>
+    </div>
+</div>
+
+
+
+
 <script>
-    
-    const config = {
+    const config0 = {
         type: 'line',
         data: {
             labels: Array(30).fill("00:00:00"),
             datasets: [{
-                label: "Random Dataset",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                label: "Pneumatics",
+                backgroundColor: 'rgba(176,55,55,.1)',
+                borderColor: 'rgb(176,55,55)',
                 data: Array(30).fill(null),
-                fill: false,
+                fill: true,
             }],
         },
         options: {
             responsive: true,
             title: {
                 display: true,
-                text: 'Creating Real-Time charts with Flask'
+                text: 'Pneumatics and Pneumatics Supply'
             },
             tooltips: {
                 mode: 'index',
@@ -49,31 +60,83 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Value'
+                        labelString: 'Pressure (psi)'
                     }
                 }]
             }
         }
-    };
-
-    const context = document.getElementById('canvas').getContext('2d');
-
-    const lineChart = new Chart(context, config);
+    }; 
+    const context0 = document.getElementById('graph0').getContext('2d');
+    const lineChart0 = new Chart(context0, config0);
+ 
+    const config1 = {
+        type: 'line',
+        data: {
+            labels: Array(30).fill("00:00:00"),
+            datasets: [{
+                label: "HE",
+                backgroundColor: 'rgba(236,174,97,.1)',
+                borderColor: 'rgb(236,174,97)',
+                data: Array(30).fill(null),
+                fill: true,
+            }],
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'HE and HE Supply'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Pressure (psi)'
+                    }
+                }]
+            }
+        }
+    }; 
+    const context1 = document.getElementById('graph1').getContext('2d');
+    const lineChart1 = new Chart(context1, config1);
 
     const source = new EventSource("/chart-data");
 
-    const socket = new WebSocket('ws://' + location.host + '/graph/data');
+    const socket = new WebSocket('ws://' + location.host + '/graph/data0');
     socket.addEventListener('message', ev => {
         const data = JSON.parse(ev.data);
-        if (config.data.labels.length === 30) {
-            config.data.labels.shift();
-            config.data.datasets[0].data.shift();
+        if (config0.data.labels.length === 30) {
+            config0.data.labels.shift();
+            config0.data.datasets[0].data.shift();
+            config1.data.labels.shift();
+            config1.data.datasets[0].data.shift();
         }
-        config.data.labels.push(data.label);
-        config.data.datasets[0].data.push(data.data);
-        lineChart.update();
+        config0.data.labels.push(data.label);
+        config0.data.datasets[0].data.push(data.data0);
+        config1.data.labels.push(data.label);
+        config1.data.datasets[0].data.push(data.data1);
+        
+        lineChart0.update();
+        lineChart1.update();
+        
     });
     
 </script>
-</body>
-</html>
+
+{% endblock %}

@@ -72,28 +72,19 @@ def testing():
 @app.route('/graph/')
 def graph():
     return render_template("graph.html")
-@sock.route('/graph/data')
-def graph_data(sock):
+
+@sock.route('/graph/data0')
+def graph_data0(sock):
     while True:
         
         graph_dict = dict()
         graph_dict['label'] = str(datetime.utcnow().strftime("%H:%M:%S"))
-        graph_dict['data'] = random.randint(0,10)
+        graph_dict['data0'] = random.randint(0,10)
+        graph_dict['data1'] = random.randint(0,10)
+        graph_dict['data2'] = random.randint(0,10)
+        graph_dict['data3'] = random.randint(0,10)
         data = json.dumps(graph_dict, separators=(',', ':'))
         sock.send(data)
-        time.sleep(1)
-
-@app.route('/echo')
-def echo_index():
-    return render_template('echo.html')
-
-@sock.route('/echo/test')
-def echo(sock):
-    i = 0
-    while True:
-        #data = sock.receive()
-        sock.send(str(random.randint(0,10)))
-        i += 1
         time.sleep(1)
 
 if __name__ == "__main__":
