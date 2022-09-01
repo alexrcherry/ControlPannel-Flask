@@ -1,1 +1,1 @@
-This is a place to test the new control panel server
+This is a place to develop the new flask control panel server
