@@ -9,17 +9,14 @@
     Control Panel
 </h1>
 
-<div style="margin: auto; height:90vh; width:90vw;border: 1px solid#e01111 ;">
+<div>
     <div>
-        <canvas id="graph0" style="display: block;border: 1px solid#000000 ;"></canvas>
+        <canvas id="graph0" width="100px" height ="100px" style="border:1px solid" ></canvas>
     </div>
     <div>
-        <canvas id="graph1" style="display: block;border: 1px solid #1a3dd9 ;"></canvas>
+        <canvas id="graph1" width="300" height ="300"></canvas>
     </div>
 </div>
-
-
-
 
 <script>
     const config0 = {
@@ -31,8 +28,14 @@
                 backgroundColor: 'rgba(176,55,55,.1)',
                 borderColor: 'rgb(176,55,55)',
                 data: Array(30).fill(null),
+                fill: true,},
+                {
+                label: "Pneumatics Supply",
+                backgroundColor: 'rgba(20,55,55,.1)',
+                borderColor: 'rgb(20,55,55)',
+                data: Array(30).fill(null),
                 fill: true,
-            }],
+            }]
         },
         options: {
             responsive: true,
@@ -65,10 +68,10 @@
                 }]
             }
         }
-    }; 
+    };
     const context0 = document.getElementById('graph0').getContext('2d');
     const lineChart0 = new Chart(context0, config0);
- 
+
     const config1 = {
         type: 'line',
         data: {
@@ -112,7 +115,7 @@
                 }]
             }
         }
-    }; 
+    };
     const context1 = document.getElementById('graph1').getContext('2d');
     const lineChart1 = new Chart(context1, config1);
 
@@ -120,23 +123,32 @@
 
     const socket = new WebSocket('ws://' + location.host + '/graph/data0');
     socket.addEventListener('message', ev => {
-        const data = JSON.parse(ev.data);
+        const datasource = JSON.parse(ev.data);
         if (config0.data.labels.length === 30) {
+
             config0.data.labels.shift();
             config0.data.datasets[0].data.shift();
+
+            config0.data.labels.shift();
+            config0.data.datasets[1].data.shift();
+
             config1.data.labels.shift();
             config1.data.datasets[0].data.shift();
         }
-        config0.data.labels.push(data.label);
-        config0.data.datasets[0].data.push(data.data0);
-        config1.data.labels.push(data.label);
-        config1.data.datasets[0].data.push(data.data1);
-        
+        config0.data.labels.push(datasource.label);
+        config0.data.datasets[0].data.push(datasource.data0);
+
+        config0.data.labels.push(datasource.label);
+        config0.data.datasets[1].data.push(datasource.data1);
+
+        config1.data.labels.push(datasource.label);
+        config1.data.datasets[0].data.push(datasource.data2);
+
         lineChart0.update();
         lineChart1.update();
-        
+
     });
-    
+
 </script>
 
 {% endblock %}
