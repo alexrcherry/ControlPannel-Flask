@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
 from datetime import datetime
 from flask_sock import Sock
 import random
@@ -9,64 +8,21 @@ import json
 
 app = Flask(__name__)
 sock = Sock(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
 
 
-class Todo(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __reper__(self):
-
-        return '<Task %r>' % self.idexit(0)
-
-
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'there was an issue returning your task'
-    else:
-        task = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html', tasks=task)
+    return render_template('index.html')
 
 
-@app.route('/delete/<int:id>')
-def delete(id):
-    task_to_delete = Todo.query.get_or_404(id)
+@app.route("/control", methods=['GET', 'POST'])
+def control():
+    if "open1" in request.form:
+        print('open')
+    elif "close1" in request.form:
+        print('close')
 
-    try:
-        db.session.delete(task_to_delete)
-        db.session.commit()
-        return redirect('/')
-    except:
-        return 'There was an issue deleting that task'
-
-
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
-    task = Todo.query.get_or_404(id)
-
-    if request.method == 'POST':
-        task.content = request.form['content']
-
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue updating that task'
-    else:
-        return render_template('update.html', task=task)
+    return render_template('controlPanel.html')
 
 
 @app.route('/testing/')
