@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<h1 style="text-align: center;">
+<h1 style="text-align: center;color:rgb(36, 36, 36);">
     Control Panel
 </h1>
 
@@ -84,6 +84,13 @@
                 borderColor: 'rgb(236,174,97)',
                 data: Array(30).fill(null),
                 fill: true,
+            },
+            {
+                label: "HE Supply",
+                backgroundColor: 'rgba(70,55,200,.1)',
+                borderColor: 'rgb(70,55,200)',
+                data: Array(30).fill(null),
+                fill: true,
             }],
         },
         options: {
@@ -137,6 +144,9 @@
 
             config1.data.labels.shift();
             config1.data.datasets[0].data.shift();
+
+            config1.data.labels.shift();
+            config1.data.datasets[1].data.shift();
         }
         config0.data.labels.push(datasource.label);
         config0.data.datasets[0].data.push(datasource.data0);
@@ -146,6 +156,9 @@
 
         config1.data.labels.push(datasource.label);
         config1.data.datasets[0].data.push(datasource.data2);
+
+        config1.data.labels.push(datasource.label);
+        config1.data.datasets[1].data.push(datasource.data3);
 
         lineChart0.update();
         lineChart1.update();

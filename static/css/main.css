@@ -9,10 +9,6 @@ body, html {
     width: 400px;
 }
 
-table, td, th {
-    border: 1px solid rgb(19, 8, 8);
-}
-
 /* CSS */
 .button-3 {
     appearance: none;
@@ -61,7 +57,7 @@ table, td, th {
 }
 
 .button-3:active {
-    background-color: #8e7a29;
+    background-color: #7e4747;
     box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
 }
 

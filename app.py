@@ -17,10 +17,10 @@ def index():
 
 @app.route("/control", methods=['GET', 'POST'])
 def control():
-    if "open1" in request.form:
-        print('open')
-    elif "close1" in request.form:
-        print('close')
+    if "Hrm_Open" in request.form:
+        print('Hrm Open')
+    elif "Hrm_Close" in request.form:
+        print('Hrm Close')
 
     return render_template('controlPanel.html')
 

@@ -1,38 +1,55 @@
 
 
-<html>
-    <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends 'base.html'%}
 
-    </head>
-    <body>
+{% block head %}
+<script type="text/javascript">
+    function toggle(button)
+    {
+      if(document.getElementById("hrm").value=="HRM: OFF")
+      {
+       document.getElementById("hrm").value="HRM: ON";
+      }
+      else
+      {
+        document.getElementById("hrm").value="HRM: OFF";
+      }
+    }
+</script>
+{% endblock %}
 
-    <h2>Buttons</h2>
-    <form method="post" action="/control">
-        <div style="margin-bottom:10px ;">
-            <p>HRM</p>
+{% block body %}
 
-        </div>
-        <div style="margin-bottom:10px ;">
-            <input style="width:20%" type="submit" name="open0" value="Open">
-            <input style="width:20%" type="submit" name="open1" value="Open">
-            <input style="width:20%" type="submit" name="open2" value="Open">
+<h2 style="color:rgb(39, 37, 37)">Ground System Actuation Panel</h2>
+<!-- <form method="post" action="/control">
+    <div style="margin-bottom:10px ; color:rgb(92, 96, 99)">
+        <p>HRM</p>
 
-        </div>
-        <div>
-            <input style="width:20%" type="submit" name="close0" value="Close">
-            <input style="width:20%" type="submit" name="close1" value="Close">
-            <input style="width:20%" type="submit" name="close2" value="Close">
+    </div>
+    <div style="margin-bottom:10px ;">
+        <input style="width:20%" type="submit" name="Hrm_Open" value="Open">
+        <input style="width:20%" type="submit" name="open1" value="Open">
+        <input style="width:20%" type="submit" name="open2" value="Open">
 
-        </div>
+    </div>
+    <div>
+        <input style="width:20%" type="submit" name="Hrm_Close" value="Close">
+        <input style="width:20%" type="submit" name="close1" value="Close">
+        <input style="width:20%" type="submit" name="close2" value="Close">
 
-        <div class="col-lg-2 form-group align-self-start">
-            <label>&nbsp;</label>
-            <button type="submit">Submit</button>
-        </div>
+    </div>
+
+    <div class="col-lg-2 form-group align-self-start">
+        <label>&nbsp;</label>
+        <button type="submit">Submit</button>
+    </div>
 
 
 
-    </form>
-    </body>
-</html>
+</form> -->
+
+<form action="">
+    <input class="button-3" type="button" id="hrm" value="HRM: ON" style="color:rgb(218, 218, 218)" onclick="toggle(this);">
+</form>
+
+{% endblock %}
