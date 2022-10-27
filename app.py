@@ -10,7 +10,7 @@ app = Flask(__name__)
 sock = Sock(app)
 
 
-@app.route('/')
+@app.route('/', methods=['Get','POST'])
 def index():
     return render_template('index.html')
 
@@ -27,12 +27,12 @@ def control():
 
 @app.route('/testing/')
 def testing():
-    return render_template('testingGraph.html')
+    return render_template('Graph.html')
 
 
 @app.route('/graph/')
 def graph():
-    return render_template("graph.html")
+    return render_template("Graph.html")
 
 
 @sock.route('/graph/data0')

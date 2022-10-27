@@ -61,6 +61,14 @@ table, td, th {
 }
 
 .button-3:active {
-    background-color: #298e46;
+    background-color: #8e7a29;
     box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
